@@ -54,7 +54,7 @@ public class SubmoduleNewBranch extends AnAction {
         if (view != null) {
             PsiDirectory dir = view.getOrChooseDirectory();
             String directoryPath = dir.getVirtualFile().getPath();
-            if (directoryPath != null && directoryPath.equals(e.getProject().getBasePath())&&directoryPath.endsWith("putong-android")){
+            if (directoryPath != null && directoryPath.equals(e.getProject().getBasePath())){
                 e.getPresentation().setEnabled(true);
             }else{
                 e.getPresentation().setEnabled(false);

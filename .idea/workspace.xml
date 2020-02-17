@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6905e0fe-13a7-4f6b-9fc9-c2ee12e7609a" name="Default Changelist" comment="" />
+    <list default="true" id="6905e0fe-13a7-4f6b-9fc9-c2ee12e7609a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/Submodule.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/Submodule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmoduleCheckoutBranch.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmoduleCheckoutBranch.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmoduleNewBranch.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmoduleNewBranch.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmodulePushRemoteBranch.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmodulePushRemoteBranch.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmoduleRemoteBranch.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TantanSubmodulePlugin/submodule/SubmoduleRemoteBranch.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/submodule/Submodule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/submodule/Submodule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/submodule/SubmoduleCheckoutBranch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/submodule/SubmoduleCheckoutBranch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/submodule/SubmoduleNewBranch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/submodule/SubmoduleNewBranch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/submodule/SubmodulePushRemoteBranch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/submodule/SubmodulePushRemoteBranch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/submodule/SubmoduleRemoteBranch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/submodule/SubmoduleRemoteBranch.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +28,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
@@ -24,6 +39,7 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProjectId" id="1VQJLZyNSh8ERS4gngfH9LqPZ1V" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="257" />
@@ -101,6 +117,19 @@
       <updated>1577179329974</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
