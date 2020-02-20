@@ -117,7 +117,7 @@ public class PushSubmoduleDialog extends JDialog {
 
     private void onOK() {
         // add your code here
-        String gitPathStr = this.gitPath.getText();
+        String gitPathStr = this.gitPath.getText().trim();
         String commitStr = SubmoduleUtils.replaceBlank(commit.getText());
         if (StringUtils.isEmpty(gitPathStr)) {
             Messages.showErrorDialog("请输入远端地址", "error");
@@ -152,7 +152,11 @@ public class PushSubmoduleDialog extends JDialog {
             //更改.gitmodule
             printOut(SubmoduleUtils.callShell("git add " + gitModulePath, rootPath));
             //提交更改
-            printOut(SubmoduleUtils.callShell("git commit -m \"gitmodule等修改\" ", rootPath));
+            if (StringUtils.isEmpty(commitStr)) {
+                printOut(SubmoduleUtils.callShell("git commit -m \"gitmodule等修改\" ", rootPath));
+            } else {
+                printOut(SubmoduleUtils.callShell("git commit -m \"gitmodule等修改&" + commitStr + "\" ", rootPath));
+            }
             SubmoduleGitUtils.addMainRemoteGit(gitPathStr, rootPath, putContainer);
             printOut("putong:module_commit完成");
             printOut("开始push 可能有超时风险 10s");

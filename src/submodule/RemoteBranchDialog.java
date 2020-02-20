@@ -63,7 +63,7 @@ public class RemoteBranchDialog extends JDialog {
 
     private void onOK() {
         // add your code here
-        String gitPathStr = this.gitPath.getText();
+        String gitPathStr = this.gitPath.getText().trim();
         String branchNameStr = branchName.getText();
         if (StringUtils.isEmpty(gitPathStr) || StringUtils.isEmpty(branchNameStr)) {
             Messages.showErrorDialog("请输入git地址/branch分支名", "错误");

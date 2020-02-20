@@ -122,7 +122,7 @@ public class ChageSubmoudleDialog extends JDialog {
             Messages.showErrorDialog("请输入分支名", "错误");
             return;
         }
-        String branchNameStr = textField1.getText();
+        String branchNameStr = textField1.getText().trim();
         if (newBranch) {
             if (StringUtils.isEmpty(sourceBranch.getText())) {
                 Messages.showErrorDialog("请输入原始分支", "错误");
@@ -152,10 +152,10 @@ public class ChageSubmoudleDialog extends JDialog {
                     if (subModuleParseMap.containsKey(key)) {
                         String path = rootPath + "/" + subModuleParseMap.get(key).path;
                         if (newBranch) {
-                            SubmoduleGitUtils.checkoutModuleBranch(textField1.getText(), false, path, putContainer);
+                            SubmoduleGitUtils.checkoutModuleBranch(textField1.getText().trim(), false, path, putContainer);
                         } else {
                             printOut("准备切换" + rootPath + "\n");
-                            SubmoduleGitUtils.checkoutBranch(textField1.getText(), "", path, false, putContainer);
+                            SubmoduleGitUtils.checkoutBranch(textField1.getText().trim(), "", path, false, putContainer);
                         }
                         printOut("module" + key + "--checkout 完成\n");
 
