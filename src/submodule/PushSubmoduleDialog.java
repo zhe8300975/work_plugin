@@ -202,7 +202,7 @@ public class PushSubmoduleDialog extends JDialog {
                 printOut(SubmoduleUtils.callShell("git push " + SubmoduleGitUtils.getRemoteName(gitPathStr), path, true));
 
                 String currentBranch = matchStatusBranch(banchStatus);
-                if (!StringUtils.isEmpty(currentBranch) && map.get(module).branch.equals(currentBranch)) {
+                if (!StringUtils.isEmpty(currentBranch) && !map.get(module).branch.equals(currentBranch)) {
                     map.get(module).branch = currentBranch;
                     haveChange = true;
                 }
