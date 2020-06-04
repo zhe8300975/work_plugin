@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +14,11 @@ public class ChageSubmoudleDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField textField1;
     private JPanel checkboxContainer;
     private JTextArea putContainer;
     private JTextField sourceBranch;
     private JPanel sourceContainer;
+    private JComboBox branchName;
     private String rootPath;
 
 
@@ -89,13 +90,24 @@ public class ChageSubmoudleDialog extends JDialog {
             checkBox.setText(item.getKey());
             checkboxContainer.add(checkBox);
         }
+        if (!newBranch) {
+            try {
+                ArrayList<String> remoteList = SubmoduleGitUtils.getTantanBranchs(rootPath);
+                for (String item : remoteList) {
+                    branchName.addItem(item);
+                }
+                branchName.setSelectedIndex(-1);
+            } catch (SubmoduleUtils.ShellThrow e) {
+                printOut(e.throwContent);
+            }
+        }
         this.pack();
         return true;
     }
 
     private void onOK() {
         // add your code here
-        if (StringUtils.isEmpty(textField1.getText())) {
+        if (StringUtils.isEmpty(branchName.getEditor().getItem().toString())) {
             Messages.showErrorDialog("请输入分支名", "错误");
             return;
         }
@@ -118,11 +130,11 @@ public class ChageSubmoudleDialog extends JDialog {
      * 切换分支
      */
     private void checkBranch(boolean newBranch) throws SubmoduleUtils.ShellThrow {
-        if (StringUtils.isEmpty(textField1.getText())) {
+        if (StringUtils.isEmpty(branchName.getEditor().getItem().toString())) {
             Messages.showErrorDialog("请输入分支名", "错误");
             return;
         }
-        String branchNameStr = textField1.getText().trim();
+        String branchNameStr = branchName.getEditor().getItem().toString().trim();
         if (newBranch) {
             if (StringUtils.isEmpty(sourceBranch.getText())) {
                 Messages.showErrorDialog("请输入原始分支", "错误");
@@ -152,10 +164,10 @@ public class ChageSubmoudleDialog extends JDialog {
                     if (subModuleParseMap.containsKey(key)) {
                         String path = rootPath + "/" + subModuleParseMap.get(key).path;
                         if (newBranch) {
-                            SubmoduleGitUtils.checkoutModuleBranch(textField1.getText().trim(), false, path, putContainer);
+                            SubmoduleGitUtils.checkoutModuleBranch(branchName.getEditor().getItem().toString().trim(), false, path, putContainer);
                         } else {
                             printOut("准备切换" + rootPath + "\n");
-                            SubmoduleGitUtils.checkoutBranch(textField1.getText().trim(), "", path, false, putContainer);
+                            SubmoduleGitUtils.checkoutBranch(branchName.getEditor().getItem().toString().trim(), "", path, false, putContainer);
                         }
                         printOut("module" + key + "--checkout 完成\n");
 

@@ -3,6 +3,7 @@ package submodule;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,6 +86,35 @@ public class SubmoduleGitUtils {
             textArea.append(str);
             textArea.paintImmediately(textArea.getBounds());
         }
+    }
+
+    public static ArrayList<String> getTantanRemotes(String rootPath) throws SubmoduleUtils.ShellThrow {
+        ArrayList<String> tantanRemoteList = new ArrayList<>();
+        String result = SubmoduleUtils.callShell("git remote ", rootPath);
+        String[] remoteAllList = result.split("\n");
+        if (remoteAllList != null && remoteAllList.length > 1) {
+            for (String item : remoteAllList) {
+                if (item.startsWith("tantan_submodule_")) {
+                    tantanRemoteList.add(item.trim().replace("tantan_submodule_", ""));
+                }
+            }
+        }
+        return tantanRemoteList;
+    }
+
+    public static ArrayList<String> getTantanBranchs(String rootPath) throws SubmoduleUtils.ShellThrow {
+        ArrayList<String> tantanRemoteList = new ArrayList<>();
+        String result = SubmoduleUtils.callShell("git branch", rootPath);
+        String[] remoteAllList = result.split("\n");
+        if (remoteAllList != null && remoteAllList.length > 1) {
+            for (String item : remoteAllList) {
+                if (!item.startsWith("执行")) {
+                    String banchName=item.substring(2,item.length());
+                    tantanRemoteList.add(banchName);
+                }
+            }
+        }
+        return tantanRemoteList;
     }
 
 
