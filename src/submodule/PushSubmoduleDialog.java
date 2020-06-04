@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class PushSubmoduleDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField gitPath;
+    private JComboBox gitPath;
     private JTextArea putContainer;
     private JTextArea commit;
     private JPanel checkboxContainer;
@@ -103,6 +104,11 @@ public class PushSubmoduleDialog extends JDialog {
                     }
                 }
             }
+            ArrayList<String> remoteList = SubmoduleGitUtils.getTantanRemotes(rootPath);
+            for (String item : remoteList) {
+                gitPath.addItem(item);
+            }
+            gitPath.setSelectedIndex(-1);
         } catch (SubmoduleUtils.ShellThrow e) {
             printOut(e.throwContent);
         }
@@ -117,7 +123,7 @@ public class PushSubmoduleDialog extends JDialog {
 
     private void onOK() {
         // add your code here
-        String gitPathStr = this.gitPath.getText().trim();
+        String gitPathStr = this.gitPath.getEditor().getItem().toString().trim();
         String commitStr = SubmoduleUtils.replaceBlank(commit.getText());
         if (StringUtils.isEmpty(gitPathStr)) {
             Messages.showErrorDialog("请输入远端地址", "error");

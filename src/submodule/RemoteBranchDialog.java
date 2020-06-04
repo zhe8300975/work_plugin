@@ -5,14 +5,18 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RemoteBranchDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField gitPath;
+    private JComboBox gitPath;
     private JTextArea putContainer;
     private JTextField branchName;
+    private JRadioButton remoteRadio;
 
     private String rootPath;
 
@@ -57,13 +61,22 @@ public class RemoteBranchDialog extends JDialog {
             return false;
         }
         this.rootPath = rootPath;
+        try {
+            ArrayList<String> remoteList = SubmoduleGitUtils.getTantanRemotes(rootPath);
+            for (String item : remoteList) {
+                gitPath.addItem(item);
+            }
+            gitPath.setSelectedIndex(-1);
+        } catch (SubmoduleUtils.ShellThrow e) {
+            printOut(e.throwContent);
+        }
         this.pack();
         return true;
     }
 
     private void onOK() {
-        // add your code here
-        String gitPathStr = this.gitPath.getText().trim();
+        // add your code herez
+        String gitPathStr = this.gitPath.getEditor().getItem().toString().trim();
         String branchNameStr = branchName.getText();
         if (StringUtils.isEmpty(gitPathStr) || StringUtils.isEmpty(branchNameStr)) {
             Messages.showErrorDialog("请输入git地址/branch分支名", "错误");
@@ -78,12 +91,41 @@ public class RemoteBranchDialog extends JDialog {
             printOut("submodule sync 完成\n");
             printOut(SubmoduleUtils.callShell("git submodule update ", rootPath, true));
             printOut("submodule update 完成\n");
+            if (remoteRadio.isSelected()) {
+                dealModuleRemote();
+            }
         } catch (SubmoduleUtils.ShellThrow e) {
             printOut(e.throwContent);
             return;
         }
         Messages.showInfoMessage("完成", "info");
         buttonOK.setVisible(false);
+    }
+
+    private void dealModuleRemote() {
+        String content = SubmoduleUtils.readFile(this.rootPath + "/.gitmodules");
+        if (StringUtils.isEmpty(content)) {
+            printOut("--remote 选中——请确认.gitmoudles文件是否为空！\n");
+            return;
+        }
+        HashMap<String, SubModuleParse> subModuleParseMap = SubmoduleUtils.parseModules(content);
+        if (subModuleParseMap == null || subModuleParseMap.size() == 0) {
+            printOut("--remote 选中——请确认.gitmoudles文件格式\n");
+            return;
+        }
+        for (Map.Entry<String, SubModuleParse> item : subModuleParseMap.entrySet()) {
+            if (!("master".equals(item.getValue().branch)
+                    && (item.getValue().url.startsWith("git@gitlab.p1staff.com:android")
+                    || item.getValue().url.startsWith("git@gitlab.p1staff.com:multimedia")))) {
+                try {
+                    printOut(SubmoduleUtils.callShell("git submodule update --remote " + item.getValue().module, rootPath, true));
+                } catch (SubmoduleUtils.ShellThrow e) {
+                    printOut(e.throwContent);
+                    printOut("个人分支:" + item.getValue().module + "—— submodule update --remote 失败\n");
+                }
+            }
+        }
+        printOut("个人分支 submodule update --remote 完成\n");
     }
 
     private void printOut(String put) {
@@ -102,4 +144,5 @@ public class RemoteBranchDialog extends JDialog {
         dialog.setVisible(true);
         System.exit(0);
     }
+
 }
