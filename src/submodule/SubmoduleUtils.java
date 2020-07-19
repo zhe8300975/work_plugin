@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SubmoduleUtils {
+
+    private static String[] envp = new String[]{"scala=/usr/local/bin/scala"};
     private static final String temp = "[submodule \"%s\"]\n" +
             "\tpath = %s\n" +
             "\turl = %s\n" +
@@ -177,6 +179,10 @@ public class SubmoduleUtils {
     }
 
     public static String callShell(String shellString, String path, boolean mayTimeOut) throws ShellThrow {
+        return callShell(shellString, path, mayTimeOut, false);
+    }
+
+    public static String callShell(String shellString, String path, boolean mayTimeOut, boolean isFile) throws ShellThrow {
         BufferedReader bufrIn = null;
         BufferedReader bufrError = null;
         StringBuilder result = new StringBuilder();
@@ -184,7 +190,11 @@ public class SubmoduleUtils {
         int exitValue;
         try {
             String[] envp = {"LANG=UTF-8"};
-            process = Runtime.getRuntime().exec(shellString, null, new File(path));
+            if (isFile) {
+                process = callShellFile(shellString, path);
+            } else {
+                process = Runtime.getRuntime().exec(shellString, null, new File(path));
+            }
             if (mayTimeOut) {
                 ShellWorker worker = new ShellWorker(process);
                 worker.start();
@@ -226,9 +236,27 @@ public class SubmoduleUtils {
         return result.toString();
     }
 
+    public static Process callShellFile(String shellString, String path) throws IOException {
+        Process process = Runtime.getRuntime().exec("/bin/bash", envp, new File("/bin"));
+        PrintWriter out = null;
+        try {
+            if (process != null) {
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(process.getOutputStream())), true);
+                out.println("cd " + path); //执行该语句后返回上一级目录
+                out.println("pwd");//打印当前目录
+                out.println(shellString);
+            }
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+        return process;
+    }
+
     public static String replaceBlank(String str) {
         String dest = "";
-        if (str!=null) {
+        if (str != null) {
             Pattern p = Pattern.compile("\\s*|\t|\r|\n");
             Matcher m = p.matcher(str);
             dest = m.replaceAll("");
