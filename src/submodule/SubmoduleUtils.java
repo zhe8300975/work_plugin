@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 public class SubmoduleUtils {
 
-    private static String[] envp = new String[]{"scala=/usr/local/bin/scala"};
     private static final String temp = "[submodule \"%s\"]\n" +
             "\tpath = %s\n" +
             "\turl = %s\n" +
@@ -183,17 +182,20 @@ public class SubmoduleUtils {
     }
 
     public static String callShell(String shellString, String path, boolean mayTimeOut, boolean isFile) throws ShellThrow {
+        return callShell(shellString, path, null, mayTimeOut, isFile);
+    }
+
+    public static String callShell(String shellString, String path, String[] envp, boolean mayTimeOut, boolean isFile) throws ShellThrow {
         BufferedReader bufrIn = null;
         BufferedReader bufrError = null;
         StringBuilder result = new StringBuilder();
         Process process = null;
         int exitValue;
         try {
-            String[] envp = {"LANG=UTF-8"};
             if (isFile) {
-                process = callShellFile(shellString, path);
+                process = callShellFile(shellString, path, envp);
             } else {
-                process = Runtime.getRuntime().exec(shellString, null, new File(path));
+                process = Runtime.getRuntime().exec(shellString, envp, new File(path));
             }
             if (mayTimeOut) {
                 ShellWorker worker = new ShellWorker(process);
@@ -236,7 +238,7 @@ public class SubmoduleUtils {
         return result.toString();
     }
 
-    public static Process callShellFile(String shellString, String path) throws IOException {
+    public static Process callShellFile(String shellString, String path, String[] envp) throws IOException {
         Process process = Runtime.getRuntime().exec("/bin/bash", envp, new File("/bin"));
         PrintWriter out = null;
         try {

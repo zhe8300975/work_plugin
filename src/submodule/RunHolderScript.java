@@ -7,6 +7,7 @@ import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang.StringUtils;
@@ -59,6 +60,13 @@ public class RunHolderScript extends AnAction {
                 Notifications.Bus.notify(notification);
                 return;
             }
+
+            if (StringUtils.isEmpty(PathMacros.getInstance().getValue("scala"))) {
+                PathMacros.getInstance().setMacro("scala", "/usr/local/bin/scala");
+            }
+            String scalaPath = "scala=" + PathMacros.getInstance().getValue("scala");
+            String[] envp = new String[]{scalaPath};
+
             String filePath = file.getPath();
             for (Map.Entry<String, SubModuleParse> item : subModuleParseMap.entrySet()) {
                 String rootPath = e.getProject().getBasePath() + "/" + item.getValue().path;
@@ -66,7 +74,7 @@ public class RunHolderScript extends AnAction {
                     try {
                         Notification notification = new Notification("Tantan", "holders脚本开始执行", rootPath, NotificationType.INFORMATION);
                         Notifications.Bus.notify(notification);
-                        String result = SubmoduleUtils.callShell("./holders.bat " + filePath, rootPath, false, true);
+                        String result = SubmoduleUtils.callShell("./holders.bat " + filePath, rootPath, envp, false, true);
                         e.getProject().getProjectFile().refresh(true, true);
                         notification = new Notification("Tantan", "holders脚本执行成功", result, NotificationType.INFORMATION);
                         Notifications.Bus.notify(notification);
@@ -75,6 +83,10 @@ public class RunHolderScript extends AnAction {
                         notification = new Notification("Tantan", "holders执行完成", "文件刷新成功", NotificationType.INFORMATION);
                         Notifications.Bus.notify(notification);
                     } catch (SubmoduleUtils.ShellThrow shellThrow) {
+                        if (shellThrow.throwContent.contains("scala: command not found call shell failed")) {
+                            Notification notification = new Notification("Tantan", "请确认scala配置是否正确", "请在preferences->path Variables 指定scala相应位置", NotificationType.ERROR);
+                            Notifications.Bus.notify(notification);
+                        }
                         Notification notification = new Notification("Tantan", "holders脚本执行失败", shellThrow.throwContent, NotificationType.ERROR);
                         Notifications.Bus.notify(notification);
                     }
